@@ -46,14 +46,6 @@ class OpenaiCog(commands.Cog):
                 await ctx.followup.send(embed=embed, ephemeral=True)
                 time.sleep(300)
                 command_count[user_id] = 0
-
-    @commands.slash_command(name="imagine", description="Генерация изображений при помощи нейросети.")
-    async def imagine(self, ctx, *, prompt):
-        owner = self.bot.get_user(owner_id)
-        prompt = str(prompt)
-        emb = disnake.Embed(title="⚠️ Ошибка.", description="Команда больше не поддерживается.", color=disnake.Color.yellow())
-        emb.set_footer(text="Приносим свои извинения, Molzy Production.", icon_url=ctx.bot.user.avatar)
-        await ctx.send(embed = emb)
         
 def setup(bot: commands.Bot):
     bot.add_cog(OpenaiCog(bot))
