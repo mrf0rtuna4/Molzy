@@ -16,9 +16,10 @@ class VoiceCog(commands.Cog):
         settings = self.load_voice_channel_settings()
         channel_id = settings.get(str(guild.id))
         if channel_id:
-            await ctx.send("Голосовой канал уже существует.")
+            emb1 = disnake.Embed(title="⚠️ Ошибка.", description=f"Голосовой канал уже существует.", color=disnake.Color.green())
+            await ctx.send(embed = emb1)
         else:
-            channel = await guild.create_voice_channel("Создать Голосовой Канал")
+            channel = await guild.create_voice_channel("Создать голосовой канал")
             settings[str(guild.id)] = str(channel.id)
             self.save_voice_channel_settings(settings)
             emb = disnake.Embed(title="✅ Готово!", description=f"Голосовой канал {channel.mention} был создан и запомнен в базе данных.", color=disnake.Color.green())
