@@ -46,6 +46,6 @@ async def on_slash_command_error(inter: disnake.ApplicationCommandInteraction, e
 async def reload(inter: disnake.ApplicationCommandInteraction, cog: str):
     if inter.author.id == bot.owner_id:
         bot.reload_extension("cogs."+cog)
-        await inter.response.send_message("Успешно!",ephemeral=True)
+        await inter.response.send_message("Ког перезагружен!",ephemeral=True)
 
 bot.run(token)
