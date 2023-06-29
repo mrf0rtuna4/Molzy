@@ -28,23 +28,19 @@ class EventCog(commands.Cog):
     async def before_status(self):
         await self.bot.wait_until_ready()
 
-    @commands.Cog.listener("on_message")
-    async def on_message(self, message):
+    @commands.command()
+    async def info(self, ctx):
+        owner_id = 386439272455995394
+        owner = self.bot.get_user(owner_id)
 
-            if self.bot.user.mentioned_in(message) and len(message.content) == len(self.bot.user.mention):
-                response = f"🔥 Приветствую, **{message.author.name}**! \n🥶 Команда, чтобы увидеть мои команды: `m.help` \n\n🤨 Официальный сервер: https://discord.gg/4Wp6V3vrn2 \n❤️ Я уверен, мы подружимся с тобой! (Пригласить бота можно по кнопке в профиле)"
-                await message.reply(response)
+        view = disnake.ui.View()
+        style = disnake.ButtonStyle.gray
+        item = disnake.ui.Button(style=style, label="Официальный сервер", url="https://discord.gg/sXKurQ2nPg")
+        view.add_item(item=item)
 
-            forbidden_words = ["фортуна гей", "фортуна клоун", "хеланей клоун", "фoртуна гeй", "helaney гей", "helaney гей", "хеланей клoyн", "хeлaнeй гeй", "фортуна гeй"]
-
-            if any(word in message.content.lower() for word in forbidden_words):
-                hours = random.randint(13, 24 * 7)
-                duration = timedelta(hours=hours)
-                await message.author.timeout(duration)
-                emb = disnake.Embed(title="✅ Тайм-Аут выдан!",
-                                    description=f"Пользователь {message.author.mention} был лишён права говорить на **{hours} часов**. Причина: Плохое поведение.",
-                                    color=disnake.Color.blurple())
-                await message.channel.send(embed=emb)
+        emb = disnake.Embed(title="Немного информации обо мне))", description="> Приветствую! Я - Molzy, ваш преданный виртуальный ассистент, готовый разнообразить этот сервер! \n\nВидишь меня впервые? Узнай мои команды - `m.help`! \n\nНадеюсь, мы станем лучшими друзьями!", color=disnake.Color.blurple())
+        emb.set_footer(text="Molzy Development", icon_url=owner.avatar.url)
+        await ctx.reply(embed=emb, view=view)
 
 def setup(bot: commands.Bot):
     bot.add_cog(EventCog(bot))

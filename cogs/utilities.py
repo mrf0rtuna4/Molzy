@@ -84,6 +84,8 @@ class classicCog(commands.Cog):
 
     @commands.slash_command(name="server-info", description="Покажу инфу о сервере))")
     async def serverstats(self, ctx):
+        member = ctx.author
+
         guild = ctx.guild
         total_members = guild.member_count
         online_members = sum(1 for member in guild.members if member.status != disnake.Status.offline)
@@ -99,6 +101,9 @@ class classicCog(commands.Cog):
         verification_level = guild.verification_level
         region = guild.region
 
+        if  guild.region == "deprecated":
+            region = "Russia"
+
         embed = disnake.Embed(title=f"Статистика сервера {guild.name}", color=disnake.Color.blurple())
 
         basic_info = (
@@ -113,6 +118,10 @@ class classicCog(commands.Cog):
             f"Онлайн: **{online_members}**",
             f"Сервер создан: **{created_at}**",
         )
+        user_info = (
+            f"Вы: **{member.name}**",
+            f"Ваша высшая роль: {member.top_role.mention}",
+        )
         other_info = (
             f"Текстовые каналы: **{text_channels}**",
             f"Голосовые: **{voice_channels}**",
@@ -121,9 +130,10 @@ class classicCog(commands.Cog):
             f"Эмодзи: **{emojis}**",
         )
 
-        embed.add_field(name="Основная информация", value='\n'.join(basic_info), inline=False)
-        embed.add_field(name="О сервере", value='\n'.join(guilds_info), inline=False)
-        embed.add_field(name="Каналы, роли и эмодзи", value='\n'.join(other_info), inline=False)
+        embed.add_field(name="> Основная информация", value='\n'.join(basic_info), inline=False)
+        embed.add_field(name="> О сервере", value='\n'.join(guilds_info), inline=False)
+        embed.add_field(name="> Пользователь", value='\n'.join(user_info))
+        embed.add_field(name="> Каналы, роли и эмодзи", value='\n'.join(other_info), inline=False)
         embed.set_thumbnail(guild.icon.url)
         embed.set_footer(text="Molzy Production", icon_url=ctx.bot.user.avatar.url)
 

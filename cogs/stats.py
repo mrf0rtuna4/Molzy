@@ -4,6 +4,7 @@ import psutil
 import platform
 import time
 from datetime import timedelta
+import random
 
 owner_id = 386439272455995394
 uowner_id = 1051530567486808115
@@ -15,7 +16,12 @@ class StatsCog(commands.Cog):
         self.start_time = time.time()
 
     @commands.command()
-    async def stats(self, ctx):
+    async def stats(self, ctx, member: disnake.Member = None):
+        if member is None:
+            member = ctx.author
+
+        phrases = [f"Теперь ты знаешь всё, {member.name}.", "Также попробуйте бота Клевер!"]
+
         view = disnake.ui.View()
         style = disnake.ButtonStyle.gray
         item = disnake.ui.Button(style=style, label="Сервер Технической Поддержки", url="https://discord.gg/sXKurQ2nPg")
@@ -41,7 +47,7 @@ class StatsCog(commands.Cog):
         about_me_info = (
             f"Операционная система: **{platform.platform()}**",
             f"Язык программирования: **Python {platform.python_version()}**",
-            f"Статус: **Активное действие.**",
+            f"Статус: **Не активен.**",
             f"RAM: **{psutil.virtual_memory().percent}%**",
             f"CPU: **{psutil.cpu_percent()}%**",
             f"Задержка: **{round(ctx.bot.latency*1000, 2)}ms**",
@@ -53,12 +59,13 @@ class StatsCog(commands.Cog):
             f"Количество серверов: **{len(ctx.bot.guilds)}**",
             f"Количество пользователей: **{user_count}**",
         )
-        embed = disnake.Embed(title=f"Моя статистика и информация обо мне", description=f"Время работы: {uptime}", color=disnake.Color.random())
+        embed = disnake.Embed(title=f"Стасиська))", url="https://discord.gg/uGJSQ86ZFN", description=f"Время работы: **{uptime}**", color=disnake.Color.random())
         embed.add_field(name="Основная информация", value='\n'.join(important_info), inline=False)
         embed.add_field(name=f"Информация о серверах", value='\n'.join(guilds_info), inline=False),
         embed.add_field(name=f"Информация про меня", value='\n'.join(about_me_info), inline=False),
         embed.add_field(name="Всё прочее", value='\n'.join(other_info), inline=False)
         embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/1100779525962485903/1112304761220382790/img-Tzgw4Gxxj4SlqO22YLpOKkyw.png")
+        embed.set_footer(text=f"{random.choice(phrases)}", icon_url=ctx.author.avatar.url)
         await ctx.reply(embed=embed, view=view)
 
 def setup(bot: commands.Bot):
