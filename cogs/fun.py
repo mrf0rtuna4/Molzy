@@ -20,6 +20,8 @@ class FunCog(commands.Cog):
     @commands.command()
     async def hug(self, ctx, member: disnake.Member = None):
             author = ctx.author
+            author_id = ctx.author.id
+
             if member == None:
                 emb = disnake.Embed(title=f"**{author.name} обнял(а) сам себя.**", color=disnake.Color.random())
                 emb.set_image(url=f'{random.choice(img_hug)}')
@@ -41,6 +43,7 @@ class FunCog(commands.Cog):
     @commands.command()
     async def pat(self, ctx, member: disnake.Member = None):
             author = ctx.author
+
             if member == None:
                 emb = disnake.Embed(title=f"**{author.name} погладил(а) сам себя.**", color=disnake.Color.random())
                 emb.set_image(url=f'{random.choice(img_pat)}')
@@ -62,6 +65,7 @@ class FunCog(commands.Cog):
     @commands.command()
     async def kiss(self, ctx, member: disnake.Member = None):
             author = ctx.author
+
             if member == None:
                 emb = disnake.Embed(title=f"**{author.name} поцеловал(а) сам себя.**", color=disnake.Color.random())
                 emb.set_image(url=f'{random.choice(img_kiss)}')
@@ -83,6 +87,7 @@ class FunCog(commands.Cog):
     @commands.command()
     async def slap(self, ctx, member: disnake.Member = None):
             author = ctx.author
+
             if member == None:
                 emb = disnake.Embed(title=f"**{author.name} дал(а) пощёчину сам себе.**", color=disnake.Color.random())
                 emb.set_image(url=f'{random.choice(img_slap)}')
@@ -104,6 +109,7 @@ class FunCog(commands.Cog):
     @commands.command()
     async def punch(self, ctx, member: disnake.Member = None):
             author = ctx.author
+
             if member == None:
                 emb = disnake.Embed(title=f"**{author.name} ударил(а) сам себя.**", color=disnake.Color.random())
                 emb.set_image(url=f'{random.choice(img_punch)}')
@@ -125,6 +131,7 @@ class FunCog(commands.Cog):
     @commands.command()
     async def bite(self, ctx, member: disnake.Member = None):
             author = ctx.author
+
             if member == None:
                 emb = disnake.Embed(title=f"**{author.name} укисил(а) сам себя.**", color=disnake.Color.random())
                 emb.set_image(url=f'{random.choice(img_bite )}')
@@ -146,6 +153,7 @@ class FunCog(commands.Cog):
     @commands.command()
     async def feed(self, ctx, member: disnake.Member = None):
             author = ctx.author
+
             if member == None:
                 emb = disnake.Embed(title=f"**{author.name} накормил(а) сам себя.**", color=disnake.Color.random())
                 emb.set_image(url=f'{random.choice(img_feed)}')
@@ -169,6 +177,7 @@ class FunCog(commands.Cog):
     async def suck(self, ctx, member: disnake.Member = None):
         if ctx.channel.is_nsfw():
             author = ctx.author
+
             if member == None:
                 emb = disnake.Embed(title=f"**{author.name} отсосал(а) сам себе.**", color=disnake.Color.random())
                 emb.set_image(url=f'{random.choice(img_sucks)}')
@@ -201,8 +210,7 @@ class FunCog(commands.Cog):
     async def fuck(self, ctx, member: disnake.Member = None):
         if ctx.channel.is_nsfw():
             author = ctx.author
-            if ctx.message.author.id == author:
-                pass
+
             if member == None:
                 emb = disnake.Embed(title=f"**{author.name} трахнул сам себя.**", color=disnake.Color.random())
                 emb.set_image(url=f'{random.choice(img_boobs)}')
@@ -237,7 +245,6 @@ class FunCog(commands.Cog):
         percantage = randint(1, 110)
         await ctx.response.defer()
 
-
         if percantage > 100:
               emb4 = disnake.Embed(title="МЕГА ЛЮБОВЬ ❤️❤️❤️", description=f"**{user1.name}** и **{user2.name}** любят друг друга на **{percantage}%**!!!!", color=disnake.Color.blurple())
               emb4.set_footer(text="СОВЕТ ВАМ ДА ЛЮБОВЬ, ГОЛУБКИ!!!", icon_url=ctx.bot.user.avatar.url)
@@ -258,13 +265,14 @@ class FunCog(commands.Cog):
               emb2.set_footer(text="Любви не существует...", icon_url=ctx.bot.user.avatar.url)
               await ctx.send(embed = emb2)
               return
+        
     @commands.slash_command(name="question", description="Задайте вопрос, боту)")
     async def question(self, ctx, *, prompt):
         phrases = ["Да.", "Нет.", "Возможно.", "Никогда."]
         prompt = str(prompt)
         embed = disnake.Embed(title=f"⟩ {prompt}", description=f"Мой ответ: {random.choice(phrases)}", color=disnake.Color.blurple())
         embed.set_footer(text="Molzy Production", icon_url=ctx.bot.user.avatar.url)
-        await ctx.send(embed=embed)        
+        await ctx.send(embed=embed)
     
 def setup(bot: commands.Bot):
     bot.add_cog(FunCog(bot))

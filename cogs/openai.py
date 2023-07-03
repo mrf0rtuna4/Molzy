@@ -13,9 +13,18 @@ class OpenaiCog(commands.Cog):
 
     @commands.slash_command(name="write", description="Задайте вопрос нейросети при помощи «GPT-3».")
     async def write(self, ctx, *, prompt):
+            forbidden = []
             owner = self.bot.get_user(owner_id)
+            
             result = str(prompt)
             await ctx.response.defer()
+            author_id = ctx.author.id
+
+            if author_id in forbidden:
+                emb5 = disnake.Embed(title="⛔ Блокировка", description="Вам было запрещено использование этой команды. Причина: Попытка отключить бота путём сбоев в работе.", color=0xFF0004)
+                emb5.set_footer(text="Обратитесь к helaney за подробностями.", icon_url=ctx.bot.user.avatar.url)
+                await ctx.send(embed=emb5)
+                return
 
             user_id = ctx.author.id
 

@@ -31,55 +31,66 @@ class classicCog(commands.Cog):
     async def profile(self, ctx, member: disnake.Member = None):
         member = member or ctx.author
 
-        roles = [role.mention for role in member.roles[1:]]
+        if ctx.message.author.id == 386439272455995394:
 
-        view = ProfileView(self.bot, ctx.author.id)
+            roles = [role.mention for role in member.roles[1:]]
 
-        status = 'Разработчик' if member.id == owner else 'Это я!' if member.id == ctx.bot.user.id else 'Тестировщик' if member.id in testers else 'Со-Разработчик' if member.id == uowner else 'Пользователь'
+            view = ProfileView(self.bot, ctx.author.id)
 
-        emb = disnake.Embed(description=member.activity or "Нет активности", color=disnake.Color.random())
-        emb.set_author(name=member.name, icon_url=member.avatar.url)
-        emb.set_thumbnail(url=member.avatar.url)
-        emb.add_field(name="👤 | Имя пользователя:", value=f"{member.display_name}", inline=False)
-        emb.add_field(name="💻 | Статус в боте:", value=status, inline=False)
-        emb.add_field(name="⚙️ | ID Участника:", value=member.id, inline=False)
-        emb.add_field(name="🕵🏻 | Дата создания аккаунта:", value=member.created_at.strftime("%d.%m.%Y %H:%M:%S"), inline=False)
-        emb.add_field(name="🎙️ | Статус:", value=str(member.status).capitalize(), inline=False)
+            status = 'Разработчик' if member.id == owner else 'Это я!' if member.id == ctx.bot.user.id else 'Тестировщик' if member.id in testers else 'Со-Разработчик' if member.id == uowner else 'Пользователь'
 
-        file_path = f'age_folder/{member.id}.txt'
-        if os.path.exists(file_path):
-            with open(file_path, 'r') as file:
-                content = file.read()
-                age = int(content) if content.isdigit() else "Не указан."
+            emb = disnake.Embed(description=member.activity or "Нет активности", color=disnake.Color.random())
+            emb.set_author(name=member.name, icon_url=member.avatar.url)
+            emb.set_thumbnail(url=member.avatar.url)
+            emb.add_field(name="💻 | Статус в боте:", value=status)
+
+            file_path = f'age_folder/{member.id}.txt'
+            if os.path.exists(file_path):
+                with open(file_path, 'r') as file:
+                    content = file.read()
+                    age = int(content) if content.isdigit() else "Не указан."
+            else:
+                age = "Не указан."
+            emb.add_field(name="🔮 | Возраст:", value=age)
+
+            if member.id != ctx.author.id:
+                view.children = [] 
+
+            view.bot = self.bot
+            await ctx.send(embed=emb, view=view)
         else:
-            age = "Не указан."
-        emb.add_field(name="🔮 | Возраст:", value=age, inline=False)
-
-        if member.id != ctx.author.id:
-            view.children = [] 
-
-        view.bot = self.bot
-        await ctx.send(embed=emb, view=view)
+            emb1 = disnake.Embed(title="⚠️ Произошла ошибка!", description="Команда находится на переработке.", color=disnake.Color.yellow())
+            await ctx.send(embed=emb1)
 
     @commands.command()
     @commands.has_permissions(manage_emojis=True)
     async def emoji(self, ctx, emoji: disnake.PartialEmoji, name: str = None):
-        ownerr = self.bot.get_user(owner)
         guild = ctx.message.guild
 
         if not guild:
             return
-       
+        
         emoji_bytes = await emoji.read()
         emoji_name = name or emoji.name
+        
+        if any(emoji_name.lower() == existing_emoji.name.lower() for existing_emoji in guild.emojis):
+            embed = disnake.Embed(
+                title='⚠️ Упс!',
+                description='Это имя уже существует на сервере Discord.',
+                color=disnake.Color.yellow()
+            )
+            embed.set_footer(text="Molzy Production", icon_url=self.bot.user.avatar.url)
+            await ctx.send(embed=embed)
+            return
+        
         new_emoji = await guild.create_custom_emoji(name=emoji_name, image=emoji_bytes)
 
         embed = disnake.Embed(
-                title='✅ Эмодзи добавлен.',
-                description=f'Эмодзи {new_emoji} успешно добавлен на сервер с именем: `{emoji_name}`',
-                color=disnake.Color.green()
-            )
-        embed.set_footer(text="Molzy Production", icon_url=ownerr.avatar.url)
+            title='✅ Эмодзи добавлен.',
+            description=f'Эмодзи {new_emoji} успешно добавлен на сервер с именем: `{emoji_name}`',
+            color=disnake.Color.green()
+        )
+        embed.set_footer(text="Molzy Production", icon_url=self.bot.user.avatar.url)
         await ctx.send(embed=embed)
 
     @commands.slash_command(name="server-info", description="Покажу инфу о сервере))")
